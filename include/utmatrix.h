@@ -112,11 +112,26 @@ bool TVector<ValType>::operator==(const TVector &v) const
 template <class ValType> // сравнение
 bool TVector<ValType>::operator!=(const TVector &v) const
 {
+	return !operator==(v);
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // присваивание
 TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 {
+	if (Size != v.Size)
+	{
+		Size = v.Size;
+
+
+
+
+
+
+	}
+
+
+
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // прибавить скаляр
