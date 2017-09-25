@@ -121,14 +121,12 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 	if (Size != v.Size)
 	{
 		Size = v.Size;
-
-
-
-
-
-
+		delete pVector;
+		pVector = new ValType[Size];
 	}
-
+	for (int i = 0; i < Size; i++)
+		pVector[i] = v.pVector[i];
+	return *this;
 
 
 
