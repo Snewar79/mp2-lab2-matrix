@@ -51,9 +51,15 @@ public:
       in >> v.pVector[i];
     return in;
   }
-  friend ostream& operator<<(ostream &out, const TVector &v)
+  friend ostream& operator<<(ostream &out,  TVector &v)
   {
-    for (int i = 0; i < v.Size; i++)
+	  for (int i = 0; i < v.Size; i++)
+		  if (i < v.GetStartIndex())
+		  {
+			  
+			  out << "n/f ";
+		  }
+		else
       out << v.pVector[i] << ' ';
     return out;
   }
@@ -73,6 +79,7 @@ template <class ValType> //конструктор копирования
 TVector<ValType>::TVector(const TVector<ValType> &v)
 {
 	Size = v.Size;
+	StartIndex = v.StartIndex;
 	pVector = new ValType[Size];
 	for (int i = 0; i < Size; i++)
 		pVector[i] = v.pVector[i];
@@ -124,6 +131,7 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 		delete pVector;
 		pVector = new ValType[Size];
 	}
+	StartIndex = v.StartIndex;
 	for (int i = 0; i < Size; i++)
 		pVector[i] = v.pVector[i];
 	return *this;
@@ -149,17 +157,38 @@ TVector<ValType> TVector<ValType>::operator*(const ValType &val)
 
 template <class ValType> // сложение
 TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
+
 {
+	TVector tmp(v.Size, v.StartIndex);
+	StartIndex = v.StartIndex;
+	for (int i = 0; i < Size; i++)
+		tmp[i] = pVector[i] + v.pVector[i];
+
+	return tmp;
+	
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычитание
 TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 {
+	TVector tmp(v.Size);
+	for (int i = 0; i < Size; i++)
+		tmp[i] = pVector[i] - v.pVector[i];
+
+	return tmp;
+
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // скалярное произведение
 ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 {
+	ValType tmp;			///			????????????????????
+	tmp = pVector[0] * v.pVector[0]
+		for (int i = 1; i < size; i++)
+			tmp += pVector[i] * v.pVector[i];
+	return tmp;
 } /*-------------------------------------------------------------------------*/
 
 
@@ -195,7 +224,10 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
+	 
 	//Да нафиг тут ничего не нужно. Вроде..
+	for (int i = 0; i < Size; i++)
+		pVector[i] = TVector<ValType>(s, i);
 
 } /*-------------------------------------------------------------------------*/
 
@@ -220,13 +252,29 @@ bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
 template <class ValType> // присваивание
 TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 {
-	return TMatrix<ValType>();
+	if (Size != mt.Size)
+	{
+		Size = mt.Size;
+		delete pVector;
+		pVector = new TVector<ValType>[Size];
+	}
+	for (int i = 0; i < Size; i++)
+		pVector[i] = mt.pVector[i];
+
+	return *this;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сложение
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 {
-	return TMatrix<ValType>();
+
+	return TVector<TVector<ValType>>::operator+(mt);
+
+
+
+
+
+	
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычитание
