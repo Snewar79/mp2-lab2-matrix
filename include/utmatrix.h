@@ -195,6 +195,8 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
+	//Да нафиг тут ничего не нужно. Вроде..
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // конструктор копирования
