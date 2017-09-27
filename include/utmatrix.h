@@ -101,7 +101,11 @@ TVector<ValType>::~TVector()
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	return pVector[pos];
+	return pVector[pos]; ///Калялки
+
+
+
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сравнение
