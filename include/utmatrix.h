@@ -53,13 +53,10 @@ public:
   }
   friend ostream& operator<<(ostream &out,  TVector &v)
   {
+	  for (int i = 0; i < v.GetStartIndex(); i++)
+		  cout << "0  ";
 	  for (int i = 0; i < v.Size; i++)
-		  if (i < v.GetStartIndex())
-		  {
-			  
-			  out << "n/f ";
-		  }
-		else
+		 
       out << v.pVector[i] << ' ';
     return out;
   }
@@ -101,7 +98,8 @@ TVector<ValType>::~TVector()
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	return pVector[pos]; ///Калялки
+	return pVector[pos-this->GetStartIndex()]; ///Калялки
+	// Да, это так
 
 
 
@@ -164,9 +162,9 @@ TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 
 {
 	TVector tmp(v.Size, v.StartIndex);
-	StartIndex = v.StartIndex;
+	//StartIndex = v.StartIndex;
 	for (int i = 0; i < Size; i++)
-		tmp[i] = pVector[i] + v.pVector[i];
+		tmp[i+StartIndex] = pVector[i] + v.pVector[i];
 
 	return tmp;
 	
@@ -228,10 +226,10 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
-	 
+	StartIndex = 0;
 	//Да нафиг тут ничего не нужно. Вроде..
 	for (int i = 0; i < Size; i++)
-		pVector[i] = TVector<ValType>(s, i);
+		pVector[i] = TVector<ValType>(s-i, i);
 
 } /*-------------------------------------------------------------------------*/
 
@@ -272,7 +270,16 @@ template <class ValType> // сложение
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 {
 
-	return TVector<TVector<ValType>>::operator+(mt);
+	TMatrix<ValType> tmp(mt.Size);
+	for (int i = 0; i < Size; i++)
+	{
+		tmp.pVector[i] = pVector[i] + mt.pVector[i];
+		cout << tmp.pVector[i] << "\n";
+	}
+
+	return tmp;
+
+	//return TVector<TVector<ValType>>::operator+(mt);
 
 
 
