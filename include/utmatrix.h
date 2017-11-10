@@ -5,6 +5,8 @@
 //
 // Верхнетреугольная матрица - реализация на основе шаблона вектора
 
+// Докостылено Волковым П.С. (Октябрь 2017-го)
+
 #ifndef __TMATRIX_H__
 #define __TMATRIX_H__
 
@@ -200,10 +202,24 @@ TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 template <class ValType> // вычитание
 TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 {
-	TVector tmp(v.Size);
-	for (int i = 0; i < Size; i++)
-		tmp[i] = pVector[i] - v.pVector[i];
+	TVector max = *this;
+	TVector min = v;
+	if (Size < v.Size)
+	{
+		max = v;
+		min = *this;
 
+	}
+	
+
+	TVector tmp(max);
+	//StartIndex = v.StartIndex;
+	for (int i = 0; i < min.Size; i++)
+		tmp.pVector[i] = pVector[i] - v.pVector[i];
+
+	if (max != *this)
+	for (int i = 0; i < max.Size; i++)
+		tmp.pVector[i] *= -1;
 	return tmp;
 
 
@@ -256,9 +272,12 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
+
+
 	if (s > MAX_MATRIX_SIZE) throw s;
 	StartIndex = 0;
-	//Да нафиг тут ничего не нужно. Вроде..
+	
+
 	for (int i = 0; i < Size; i++)
 		pVector[i] = TVector<ValType>(s-i, i);
 
@@ -317,7 +336,7 @@ TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 	for (int i = 0; i < Size; i++)
 	{
 		tmp.pVector[i] = pVector[i] + mt.pVector[i];
-		cout << tmp.pVector[i] << "\n";
+	//	cout << tmp.pVector[i] << "\n";
 	}
 
 	return tmp;
@@ -340,7 +359,7 @@ TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 	for (int i = 0; i < Size; i++)
 	{
 		tmp.pVector[i] = pVector[i] - mt.pVector[i];
-		cout << tmp.pVector[i] << "\n";
+		//cout << tmp.pVector[i] << "\n";
 	}
 
 	return tmp;
